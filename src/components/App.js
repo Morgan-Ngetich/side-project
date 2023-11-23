@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import LandingPage from './LandingPage';
 import LoginForm from "./LoginForm"
 import Shirts from '../pages/Shirts';
 import Shoes from '../pages/Shoes';
 import Trousers from '../pages/Trousers';
 import Cart from '../pages/Cart'
+import NavBar from './Navbar';
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -45,18 +46,31 @@ function App() {
     setCart( cart.filter((item) =>item.id !== productId));
     
   }
+  const handleBuyItem = (itemId) => {
+    const updatedCart = cart.map((item) =>
+      item.id === itemId && item.stock > 0 ? { ...item, stock: item.stock - 1 } : item
+    );
+    setCart(updatedCart);
+  };
+
+  
+   
   return (
     <div className="App">
       <Router>
-        <Routes>
+            <NavBar  onLogout={handleLogout}/>
+          <Routes>
           {isLoggedIn ? (
+            
             <>
-              <Route path="/" element={<LandingPage onLogout={handleLogout}/>} />
+              <Route path="/" element={<LandingPage/>} />
               <Route path="/shirts" element={<Shirts isproduct={isproduct} onAddToCart={handleAddToCart} />} />
               <Route path="/shoes" element={<Shoes isproduct={isproduct} onAddToCart={handleAddToCart} />} />
               <Route path="/trousers" element={<Trousers isproduct={isproduct} onAddToCart={handleAddToCart} />} />
-              <Route path="/cart" element={<Cart cart={cart} onRemoveFromCart={handleRemoveFromCart} />} />              
+              <Route path="/cart" element={<Cart cart={cart} onRemoveFromCart={handleRemoveFromCart} onBuyItem={handleBuyItem}
+                 />} />              
             </>
+            
           ) : (
             <>
              <Route path="/" element={<LoginForm onLogin={handleLogin}/>} />
