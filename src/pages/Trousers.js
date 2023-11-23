@@ -14,11 +14,11 @@ function Trousers({ isproduct, onAddToCart }) {
             <p><span>Size:</span> {product.size}</p>
             <p><span>Stock:</span> {product.stock}</p>
             {/* Wrap the card details in a Link to the cart */}
-            <Link to="/cart" >
+            
               <button className='add-to-cart' onClick={() => onAddToCart(product)}>
                 Add to cart
               </button>
-            </Link>
+            
           </div>
         </div>
       ))}
